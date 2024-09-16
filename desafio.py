@@ -6,11 +6,10 @@ menu = """
 [4] Criar Cliente
 [5] Listar dados do Cliente
 [6] Criar Conta
+[7] Listar Contas do Cliente
 [9] Sair
 
 => """
-
-clientes = {}
 
 menu_extrato = """
 Informe qual tipo de Extrato deseja:
@@ -95,7 +94,33 @@ def criar_usuarios(listagem):
     end = input('Endereço(logradouro, nro - bairro - cidade/sigla estado): ')
 
     listagem.append({'cpf':cpf,'nome':nome,'data_nascimento':nasc,'endereco':end})
-    print('Cliente cadastrado com sucesso.')
+    print('Cliente cadastrado com sucesso!')
+
+def criar_conta(cont,user,ag):
+  cpf = input('Informe o CPF do cliente: ').replace('.','').replace('-','')
+  if not check_usuario(cpf,user): print('Cliente inexistente.')
+  else:
+    agencia = ag
+    conta = len(cont)+1
+    
+    cont.append({'agencia':agencia,'conta':conta,'cpf':cpf})
+    print('Conta criada com sucesso!')
+
+def listar_contas(listagem):
+  cpf = input('Informe o CPF do cliente: ').replace('.','').replace('-','')
+  if not check_usuario(cpf,listagem):print('Cliente inexistente.')
+  else:
+    for item in listagem:
+      if item['cpf'] == cpf:
+        ag = item.get('agencia')
+        cont = item.get('conta')  
+
+      print('===> Dados da Conta <===')
+      print(f'Conta: {cont} ')
+      print(f'Agência: {ag}')
+      print(f'CPF: {cpf}')
+      print('===========><===========')
+      print('')
 
 def listar_dados(listagem):
   cpf = input('Informe o CPF do cliente: ').replace('.','').replace('-','')
@@ -119,6 +144,7 @@ extrato = True
 depositosT = []
 saquesT = []
 usuarios = []
+contas = []
 numero_de_saques = 0
 LIMITE_SAQUES = 3
 AGENCIA = '0001'
@@ -172,6 +198,12 @@ while True:
   
   elif opcao == '5': #Exibir dados do cliente
     listar_dados(usuarios)
+
+  elif opcao == '6': #Criar conta
+    criar_conta(contas,usuarios,AGENCIA)
+
+  elif opcao == '7': #Listar contas
+    listar_contas(contas)
 
   elif opcao == "9": #Sair
     break
